@@ -1,7 +1,9 @@
-import { DataTypes } from "sequelize";
+import { DataTypes, Model, Optional } from "sequelize";
 import { db } from "../../../models/database/dbConnection";
+import { IUser } from "../interfaces/IUser";
+export interface IUserCreationAttributes extends Optional<IUser, "id"> {}
 
-const User = db.define('User', {
+const User = db.define<Model<IUser, IUserCreationAttributes>>('User', {
   id: {
     type: DataTypes.INTEGER,
     autoIncrement: true,
