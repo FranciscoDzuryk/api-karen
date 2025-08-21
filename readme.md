@@ -24,3 +24,23 @@ npm install
 ```bash
 npm run dev 
 ```
+
+
+## Bash para crear modulos
+
+1. Le damos permisos al archivo sh
+```bash
+chmod +x createModule.sh
+```
+
+2. Ejecutamos el comando 
+```bash
+./createModule.sh
+```
+Nos va a pedir el nombre del modulo, lo ponemos y apretamos enter 
+```bash
+Nombre del módulo (singular, ej: User):
+```
+
+y al instante deberiamos ver dentro de modules/ el modulo que hemos creado con sus directorios de controllers, interfaces, models, routes
+
