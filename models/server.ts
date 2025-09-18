@@ -30,6 +30,7 @@ class Server {
     async connectToDatabase () {
         try {
             await db.authenticate();
+            await db.sync();
             console.log('DB Connected');
         } catch (error) {
             console.error('DB Connection failed:', error);
