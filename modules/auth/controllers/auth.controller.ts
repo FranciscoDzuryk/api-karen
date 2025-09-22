@@ -17,13 +17,13 @@ export const LogIn = async (req: Request, res: Response) => {
         const passwordHash = String(user.get("password"));
         const passwordValid = await bcrypt.compare(password, passwordHash);
         if (!passwordValid) {
-            return res.status(401).json({ message: "Contraseña incorrecta" });
+            return res.status(401).json({ message: "Credenciales inválidas" });
         }
 
         if (user.get("status") && (user as any).status.name !== "Habilitado") {
             return res
                 .status(403)
-                .json({ message: "Usuario no habilitado para acceder" });
+                .json({ message: "Credenciales inválidas" });
         }
 
         res.status(200).json({
