@@ -12,8 +12,9 @@ class Server {
         this.port = process.env.PORT ?? '8000';
         
         this.connectToDatabase();
-        this.routes();
         this.middlewares();
+        this.routes();
+        
     }
 
     routes () {
