@@ -1,7 +1,8 @@
 import { Request, Response } from "express";
 import bcrypt from "bcryptjs";
-import User from "../../users/models/user.models";
-import UserStatus from "../../users/models/userStatus.models";
+import logger from "@models/logger/logger";
+import User from "@modules/users/models/user.models";
+import UserStatus from "@modules/users/models/userStatus.models";
 
 export const LogIn = async (req: Request, res: Response) => {
     try {
@@ -12,15 +13,18 @@ export const LogIn = async (req: Request, res: Response) => {
         });
         
         if (!user) {
+            logger.error(`Intento de login fallido: usuario no encontrado (${email})`);
             return res.status(401).json({ message: "Credenciales inválidas" });
         }
         const passwordHash = String(user.get("password"));
         const passwordValid = await bcrypt.compare(password, passwordHash);
         if (!passwordValid) {
+            logger.error(`Intento de login fallido: Contraseña invalida.`);
             return res.status(401).json({ message: "Credenciales inválidas" });
         }
 
         if (user.get("status") && (user as any).status.name !== "Habilitado") {
+            logger.error(`Intento de login fallido: El usuario (${email}) no se encuentra Habilitado.`);
             return res
                 .status(403)
                 .json({ message: "Credenciales inválidas" });
