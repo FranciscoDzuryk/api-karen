@@ -1,10 +1,10 @@
 import { Router } from "express";
-import { getUsuarios } from "../controllers/user.controller";
-
-
+import { getUsuarios, registerUser,verifyCodeRegister } from "../controllers/user.controller";
 
 const router = Router();
 
 router.get('/', getUsuarios);
+router.post('/register', registerUser);
+router.post('/verify-code', verifyCodeRegister);
 
 export default router;

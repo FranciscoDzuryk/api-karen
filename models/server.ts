@@ -8,13 +8,13 @@ class Server {
     private port: String;
 
     constructor () {
-        this.app = express()
-        this.port = process.env.PORT ?? '8000';
-        
-        this.connectToDatabase();
-        this.routes();
-        this.middlewares();
-    }
+    this.app = express()
+    this.port = process.env.PORT ?? '8000';
+
+    this.middlewares();         
+    this.routes();             
+    this.connectToDatabase(); 
+}
 
     routes () {
         registerRoutes(this.app)
