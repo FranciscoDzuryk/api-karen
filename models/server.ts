@@ -8,13 +8,14 @@ class Server {
     private port: String;
 
     constructor () {
-    this.app = express()
-    this.port = process.env.PORT ?? '8000';
-
-    this.middlewares();         
-    this.routes();             
-    this.connectToDatabase(); 
-}
+        this.app = express()
+        this.port = process.env.PORT ?? '8000';
+        
+        this.connectToDatabase();
+        this.middlewares();
+        this.routes();
+        
+    }
 
     routes () {
         registerRoutes(this.app)
@@ -30,6 +31,7 @@ class Server {
     async connectToDatabase () {
         try {
             await db.authenticate();
+            await db.sync();
             console.log('DB Connected');
         } catch (error) {
             console.error('DB Connection failed:', error);
