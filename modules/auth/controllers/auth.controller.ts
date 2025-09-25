@@ -8,8 +8,8 @@ export const LogIn = async (req: Request, res: Response) => {
     try {
         const { email, password } = req.body;
         const user = await User.findOne({
-        where: { email },
-        include: [{ model: UserStatus, as: "status" }]
+            where: { email },
+            include: [{ model: UserStatus, as: "status" }]
         });
         
         if (!user) {

@@ -1,7 +1,7 @@
 import { DataTypes, Model, Optional } from "sequelize";
-import { db } from "../../../models/database/dbConnection";
-import UserStatus from "./userStatus.models";
-import { IUser } from "../interfaces/IUser";
+import { db }  from "@models/database/dbConnection";
+import UserStatus from "@modules/users/models/userStatus.models";
+import { IUser } from "@modules/users/interfaces/IUser";
 
 
 export interface IUserCreationAttributes extends Optional<IUser, "id"> {}
@@ -18,6 +18,10 @@ const User = db.define<Model<IUser, IUserCreationAttributes>>(
       type: DataTypes.STRING,
       allowNull: false
     },
+    lastname: {
+      type: DataTypes.STRING,
+      allowNull: false
+    },
     email: {
       type: DataTypes.STRING,
       allowNull: false
@@ -25,6 +29,14 @@ const User = db.define<Model<IUser, IUserCreationAttributes>>(
     password: {
       type: DataTypes.STRING,
       allowNull: false
+    },
+    code_register: {
+      type: DataTypes.STRING,
+      allowNull: true
+    },
+    code_recovery: {
+      type: DataTypes.STRING,
+      allowNull: true
     },
     user_status_id: {
       type: DataTypes.INTEGER,

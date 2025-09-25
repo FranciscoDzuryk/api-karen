@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import User from "../models/user.models";
+import User from "@modules/users/models/user.models";
 import bcrypt from 'bcryptjs';
 
 export const getUsuarios = async (req: Request, res: Response) => {
@@ -14,9 +14,9 @@ export const getUsuarios = async (req: Request, res: Response) => {
 
 export const registerUser = async (req: Request, res: Response) => {
   try {
-    const { nombre, apellido, email, password, user_status_id } = req.body;
+    const { name, lastname, email, password } = req.body;
 
-    if (!nombre || !apellido || !email || !password) {
+    if (!name || !lastname || !email || !password) {
       return res.status(400).json({ error: 'Todos los campos son obligatorios: nombre, apellido, email y contraseña' });
     }
 
@@ -30,13 +30,12 @@ export const registerUser = async (req: Request, res: Response) => {
     const hashedPassword = await bcrypt.hash(password, 10);
 
     const newUser = await User.create({
-      nombre,
-      apellido,
+      name,
+      lastname,
       email,
       password: hashedPassword,
-      active: 1,
       code_register: Math.floor(100000 + Math.random() * 900000).toString(),
-      code_recovery: null,
+      code_recovery: '',
       user_status_id: 1,
     });
 
@@ -66,7 +65,7 @@ export const verifyCodeRegister = async (req: Request, res: Response) => {
     }
 
     await user.update({
-      code_register: null,
+      code_register: '',
       user_status_id: 2
     });
 
@@ -75,6 +74,3 @@ export const verifyCodeRegister = async (req: Request, res: Response) => {
     res.status(500).json({ error: error.message });
   }
 };
-
-
-
