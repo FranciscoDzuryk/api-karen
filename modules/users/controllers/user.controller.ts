@@ -1,5 +1,7 @@
 import { Request, Response } from "express";
 import User from "@modules/users/models/user.models";
+import Teacher from "@modules/teachers/models/teacher.model";
+import Student from "@modules/students/models/student.model";
 import bcrypt from 'bcryptjs';
 
 export const getUsuarios = async (req: Request, res: Response) => {
@@ -14,14 +16,19 @@ export const getUsuarios = async (req: Request, res: Response) => {
 
 export const registerUser = async (req: Request, res: Response) => {
   try {
-    const { name, lastname, email, password } = req.body;
+    const { name, lastname, email, password, user_type } = req.body;
 
-    if (!name || !lastname || !email || !password) {
-      return res.status(400).json({ error: 'Todos los campos son obligatorios: nombre, apellido, email y contraseña' });
+    // Validaciones mínimas
+    if (!name || !lastname || !email || !password || !user_type) {
+      return res.status(400).json({ error: 'Todos los campos son obligatorios: nombre, apellido, email, contraseña y tipo de usuario' });
     }
 
     if (!email.includes('@')) {
       return res.status(400).json({ error: 'El correo electrónico no es válido' });
+    }
+
+    if (user_type !== 'teacher' && user_type !== 'student') {
+      return res.status(400).json({ error: 'Tipo de usuario inválido: debe ser "teacher" o "student"' });
     }
 
     const existe = await User.findOne({ where: { email } });
@@ -39,12 +46,18 @@ export const registerUser = async (req: Request, res: Response) => {
       user_status_id: 1,
     });
 
-    res.status(201).json({ message: 'Usuario registrado', user: newUser });
+    // Crear registro en tabla correspondiente
+    if (user_type === 'teacher') {
+      await Teacher.create({ user_id: newUser.getDataValue('id') });
+    } else {
+      await Student.create({ user_id: newUser.getDataValue('id') });
+    }
+
+    res.status(201).json({ message: 'Usuario registrado correctamente', user: newUser });
   } catch (error: any) {
     res.status(500).json({ error: error.message });
   }
 };
-
 
 export const verifyCodeRegister = async (req: Request, res: Response) => {
   try {
