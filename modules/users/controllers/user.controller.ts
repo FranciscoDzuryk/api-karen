@@ -18,7 +18,6 @@ export const registerUser = async (req: Request, res: Response) => {
   try {
     const { name, lastname, email, password, user_type } = req.body;
 
-    // Validaciones mínimas
     if (!name || !lastname || !email || !password || !user_type) {
       return res.status(400).json({ error: 'Todos los campos son obligatorios: nombre, apellido, email, contraseña y tipo de usuario' });
     }
@@ -46,7 +45,6 @@ export const registerUser = async (req: Request, res: Response) => {
       user_status_id: 1,
     });
 
-    // Crear registro en tabla correspondiente
     if (user_type === 'teacher') {
       await Teacher.create({ user_id: newUser.getDataValue('id') });
     } else {
