@@ -114,9 +114,12 @@
     "paths": {
       "@models/*": ["models/*"],
       "@modules/*": ["modules/*"],
-      "@logs/*": ["logs/*"]
+      "@logs/*": ["logs/*"],
+      "@utils/*": ["utils/*"],
+      "@middleware/*": ["middleware/*"]
     },
   },
+
   "include": ["**/*.ts"],
   "exclude": ["node_modules", "dist"]
 }

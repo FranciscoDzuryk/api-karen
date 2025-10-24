@@ -18,10 +18,6 @@ const User = db.define<Model<IUser, IUserCreationAttributes>>(
       type: DataTypes.STRING,
       allowNull: false
     },
-    lastname: {
-      type: DataTypes.STRING,
-      allowNull: false
-    },
     email: {
       type: DataTypes.STRING,
       allowNull: false
@@ -30,14 +26,6 @@ const User = db.define<Model<IUser, IUserCreationAttributes>>(
       type: DataTypes.STRING,
       allowNull: false
     },
-    code_register: {
-      type: DataTypes.STRING,
-      allowNull: true
-    },
-    code_recovery: {
-      type: DataTypes.STRING,
-      allowNull: true
-    },
     user_status_id: {
       type: DataTypes.INTEGER,
       allowNull: false,
@@ -45,6 +33,10 @@ const User = db.define<Model<IUser, IUserCreationAttributes>>(
         model: "user_status",
         key: "id"
       }
+    },
+    created_at: {
+      type: DataTypes.DATE,
+      allowNull: false
     }
   },
   {
