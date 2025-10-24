@@ -1,10 +1,10 @@
 export interface IUser {
   id: number;
   name: string;
-  lastname: string;
+  // lastname: string; no está en la db pero seguramente lo tengan que agregar
   email: string;
   password: string;
-  code_register:string;
-  code_recovery:string;
   user_status_id: number;
+  created_at?: Date;
+  
 }
