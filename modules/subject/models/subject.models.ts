@@ -10,12 +10,15 @@ const Subject = db.define<Model<ISubject, ISubjectCreationAttributes>>('subject'
     autoIncrement: true,
     primaryKey: true
   },
-  // Agrega tus campos aquí
+  name: {
+    type: DataTypes.STRING,
+  },
+  teacher_id: {
+    type: DataTypes.INTEGER,
+  }
 }, {
   tableName: 'subjects',
-  timestamps: true,
-  createdAt: 'created_at',
-  updatedAt: 'updated_at'
+  timestamps: false
 });
 
 export default Subject;

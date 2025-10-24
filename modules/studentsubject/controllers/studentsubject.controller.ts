@@ -1,13 +1,12 @@
 import { Request, Response } from "express";
-import Subject from "@modules/subject/models/subject.models";
+import Studentsubject from "../models/studentsubject.models";
 
-export const getSubjects = async (req: Request, res: Response) => {
+export const getStudentsubjects = async (req: Request, res: Response) => {
     try {
-        const data = await Subject.findAll();
+        const data = await Studentsubject.findAll();
         res.json({ ok: true, data });
     } catch (error) {
         console.error(error);
         res.status(500).json({ ok: false, message: 'Error' });
     }
 };
-

@@ -1,14 +1,21 @@
 import { Request, Response, Router } from "express";
-import { getUsuarios, registerUser,verifyCodeRegister } from "@modules/users/controllers/user.controller";
+import { UserController } from "@modules/users/controllers/user.controller";
 
 const router = Router();
 
-router.get('/', getUsuarios);
+router.get('/', UserController.getUsers);
+
 router.post('/register', (req: Request, res: Response) => {
-	registerUser(req, res);
+	UserController.registerUser(req, res);
 });
+
 router.post('/verify-code', (req: Request, res: Response) => {
-	verifyCodeRegister(req, res);
+	UserController.verifyCodeRegister(req, res);
 });
+
+router.post('/register-teacher', (req: Request, res: Response) => {
+	UserController.registerProfesor(req, res);
+});
+
 
 export default router;

@@ -1,4 +1,5 @@
 export interface ISubject {
-  id: string;
-  // AGREGAR MAS CAMPOS
+  id?: number;
+  name: string;
+  teacher_id: number;
 }

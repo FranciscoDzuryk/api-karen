@@ -1,10 +1,7 @@
 import { DataTypes, Model } from 'sequelize';
-import { db } from '../../../models/database/dbConnection';
-
-interface IStudentAttributes {
-  id?: number;
-  user_id: number;
-}
+import { db }  from "@models/database/dbConnection";
+import User from "@modules/users/models/user.models";
+import { IStudentAttributes } from '@modules/student/interfaces/IStudentAttributes';
 
 interface IStudentInstance extends Model<IStudentAttributes>, IStudentAttributes {}
 
@@ -22,5 +19,8 @@ const Student = db.define<IStudentInstance>('Student', {
   tableName: 'students',
   timestamps: false
 });
+
+Student.belongsTo(User, { foreignKey: "user_id", as: "user" });
+
 
 export default Student;
