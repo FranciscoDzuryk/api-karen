@@ -47,7 +47,6 @@ const User = db.define<Model<IUser, IUserCreationAttributes>>(
   }
 );
 
-// Relación con UserStatus
 User.belongsTo(UserStatus, { foreignKey: "user_status_id", as: "status" });
 
 export default User;

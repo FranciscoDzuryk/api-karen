@@ -6,6 +6,7 @@ import classRoutes from '@modules/classes/routes/class.route';
 import messageRoutes from '@modules/message/routes/message.route';
 import studentSubjectRoutes from '@modules/studentsubject/routes/studentsubject.route';
 import subjectRoutes from '@modules/subject/routes/subject.route';
+import teacherStudentRoutes from '@modules/teacherStudent/routes/teacherStudent.routes';
 
 const apiPrefix = process.env.API_PREFIX || '/api';
 
@@ -36,6 +37,8 @@ export const registerRoutes = (app: Application) => {
     console.log(`Ruta registrada: ${apiPrefix}/subjects`);
     
     app.use(apiPrefix, apiRouter);
+
+    app.use('/api/teacher', teacherStudentRoutes);
     
     // Middleware para rutas no encontradas
     app.use((req, res, next) => {

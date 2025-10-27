@@ -31,7 +31,7 @@ export class UserService {
       password: hashedPassword,
       code_register: Math.floor(100000 + Math.random() * 900000).toString(),
       code_recovery: '',
-      user_status_id: 1
+      user_status_id: 1 // Los estudiantes comienzan como 'Creado' y necesitan ser habilitados
     });
 
     const newStudent = await Student.create({ user_id: newUser.getDataValue('id') });
@@ -68,7 +68,7 @@ export class UserService {
       password: hashedPassword,
       code_register: '',
       code_recovery: '',
-      user_status_id: 2 // profesor
+      user_status_id: 2 // Los profesores se crean directamente como 'Habilitados'
     });
 
     const teacherData = await Teacher.create({ user_id: newUser.getDataValue('id') as number });
