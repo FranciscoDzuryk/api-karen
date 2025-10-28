@@ -6,10 +6,22 @@ import Studentsubject from '@modules/studentsubject/models/studentsubject.models
 import Teacher from '@modules/teacher/models/teacher.model';
 import Classes from '@modules/classes/models/class.models';
 import ClassesContent from '@modules/classes/models/classContent.models';
+import UserStatus from '@modules/users/models/userStatus.models';
 
 export class UserService {
   static async getAllUsers() {
-    return await User.findAll();
+    return await User.findAll(
+      {
+        attributes: { exclude: ["password"] }, 
+        include: [
+          {
+            model: UserStatus,
+            as: "status",
+            attributes: ["name"] 
+          }
+        ]
+      }
+    );
   }
 
   static async createStudentUser(data: any) {
@@ -58,6 +70,11 @@ export class UserService {
 
     const existingUser = await User.findOne({ where: { email } });
     if (existingUser) throw new Error('Correo electrónico ya registrado');
+
+    // Para no privar la API, dejamos crear un solo profesor
+    // to do: eliminar esta restricción en el futuro si es necesario, y crear un admin para los token en principio.
+    const existingProfesor = await Teacher.findAndCountAll();
+    if (existingProfesor.count > 0) throw new Error('Ya existe un profesor registrado');
 
     const hashedPassword = await bcrypt.hash(password, 10);
 

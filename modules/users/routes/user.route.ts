@@ -5,7 +5,7 @@ import { authenticateToken } from "@middleware/auth";
 const router = Router();
 
 // Rutas públicas
-router.post('/register', (req: Request, res: Response) => {
+router.post('/register', authenticateToken ,(req: Request, res: Response) => {
     UserController.registerUser(req, res);
 });
 

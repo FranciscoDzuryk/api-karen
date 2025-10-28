@@ -5,6 +5,8 @@ import Student from '@modules/student/models/student.models';
 import TeacherStudent from '../models/teacherStudent.model';
 import UserStatus from '@modules/users/models/userStatus.models';
 import User from '@modules/users/models/user.models';
+import Studentsubject from '@modules/studentsubject/models/studentsubject.models';
+import Subject from '@modules/subject/models/subject.models';
 
 export class TeacherStudentController {
   static async addStudent(req: Request, res: Response) {
@@ -191,9 +193,16 @@ export class TeacherStudentController {
         }
       }
 
+      const subject = await Subject.findOne({ where: { teacher_id: teacherId } });
+
+      Studentsubject.update(
+        { status: 2 },
+        { where: { student_id: studentId, subject_id: subject?.getDataValue('id') as number } }
+      );
+
       const userId = (student as any).user_id;
       await User.update(
-        { user_status_id: validStatus.get('id') },
+        { user_status_id: validStatus.get('id') as number },
         { where: { id: userId } }
       );
 

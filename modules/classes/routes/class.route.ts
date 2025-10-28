@@ -1,4 +1,4 @@
-import { Router } from "express";
+import { RequestHandler, Router } from "express";
 import { 
     getClasses, 
     getClassById, 
@@ -10,14 +10,14 @@ import { authenticateToken } from "@middleware/auth";
 
 const router = Router();
 
-router.get('/', authenticateToken, getClasses);
+router.get('/', authenticateToken as any, getClasses);
 
-router.get('/:id', authenticateToken, getClassById);
+router.get('/:id', authenticateToken as any, getClassById as RequestHandler);
 
-router.post('/', authenticateToken, createClass);
+router.post('/', authenticateToken as any, createClass);
 
-router.put('/:id', authenticateToken, updateClass);
+router.put('/:id', authenticateToken as any, updateClass as RequestHandler);
 
-router.delete('/:id', authenticateToken, deleteClass);
+router.delete('/:id', authenticateToken as any, deleteClass as RequestHandler);
 
 export default router;
