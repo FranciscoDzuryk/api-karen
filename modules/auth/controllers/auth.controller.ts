@@ -53,7 +53,7 @@ export const LogIn = async (req: Request, res: Response) => {
 
         // Verificar si el usuario está habilitado
         const statusName = userStatus.get('name');
-        if (statusName !== "Enabled") {
+        if (statusName && typeof statusName === 'string' && statusName.toLowerCase() !== 'enabled') {
             logger.error(`Intento de login fallido: El usuario (${email}) no está habilitado. Estado actual: ${statusName}`);
             return res.status(403).json({ 
                 message: "Su cuenta no está habilitada",
