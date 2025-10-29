@@ -123,9 +123,9 @@ export class TeacherStudentController {
       const { status } = req.body;
       const teacherId = (req as any).user.id;
 
-      console.log(`[DEBUG] Actualizando estado del estudiante ${studentId} por el profesor ${teacherId} a estado: ${status}`);
+      console.log(`[DEBUG] Actualizando estado del estudiante ${studentId} por el profesor ${teacherId} a estado: ${status.toLowerCase()}`);
 
-      const validStatus = await UserStatus.findOne({ where: { name: status } });
+      const validStatus = await UserStatus.findOne({ where: { name: status.toLowerCase() } });
       if (!validStatus) {
         const statuses = await UserStatus.findAll();
         const availableStatuses = statuses.map((s: any) => s.get('name'));
