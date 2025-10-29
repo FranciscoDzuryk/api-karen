@@ -8,6 +8,7 @@ export class UserController {
       const users = await UserService.getAllUsers();
       res.json({ ok: true, data: users });
     } catch (error: any) {
+      console.log(error);
       res.status(500).json({ ok: false, message: 'Error' });
     }
   }

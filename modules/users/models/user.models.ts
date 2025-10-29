@@ -2,7 +2,7 @@ import { DataTypes, Model, Optional } from "sequelize";
 import { db }  from "@models/database/dbConnection";
 import UserStatus from "@modules/users/models/userStatus.models";
 import { IUser } from "@modules/users/interfaces/IUser";
-
+import  Student from "@modules/student/models/student.models";
 
 export interface IUserCreationAttributes extends Optional<IUser, "id"> {}
 
@@ -46,7 +46,5 @@ const User = db.define<Model<IUser, IUserCreationAttributes>>(
     updatedAt: false
   }
 );
-
-User.belongsTo(UserStatus, { foreignKey: "user_status_id", as: "status" });
 
 export default User;

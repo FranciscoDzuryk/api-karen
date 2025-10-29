@@ -7,22 +7,45 @@ import Teacher from '@modules/teacher/models/teacher.model';
 import Classes from '@modules/classes/models/class.models';
 import ClassesContent from '@modules/classes/models/classContent.models';
 import UserStatus from '@modules/users/models/userStatus.models';
+import "@models/usersAssociations"; 
 
 export class UserService {
-  static async getAllUsers() {
-    return await User.findAll(
-      {
-        attributes: { exclude: ["password"] }, 
-        include: [
-          {
+//   static async getAllUsers() {
+//     return await User.findAll(
+//       {
+//         attributes: { exclude: ["password"] }, 
+//         include: [
+//           {
+//             model: UserStatus,
+//             as: "status",
+//             attributes: ["name"] 
+//           }
+//         ]
+//       }
+//     );
+//   }
+
+
+    static async getAllUsers() {
+        const include: any[] = [
+            {
             model: UserStatus,
             as: "status",
-            attributes: ["name"] 
-          }
-        ]
-      }
-    );
-  }
+            attributes: ["name"]
+            },
+            {
+                model: Student,
+                as: "student",
+                required: true 
+            }
+        ];
+
+        return await User.findAll({
+            attributes: { exclude: ["password"] },
+            include
+        });
+    }
+
 
   static async createStudentUser(data: any) {
     const { name, lastname, email, password } = data;

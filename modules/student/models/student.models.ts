@@ -20,7 +20,6 @@ const Student = db.define<IStudentInstance>('Student', {
   timestamps: false
 });
 
-Student.belongsTo(User, { foreignKey: "user_id", as: "user" });
 
 
 export default Student;
