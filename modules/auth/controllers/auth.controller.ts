@@ -5,6 +5,7 @@ import User from "@modules/users/models/user.models";
 import UserStatus from "@modules/users/models/userStatus.models";
 import { generateToken } from "@utils/jwt";
 import { IUser } from "@modules/users/interfaces/IUser";
+import Student from "@modules/student/models/student.models";
 
 export const LogIn = async (req: Request, res: Response) => {
     try {
@@ -69,6 +70,8 @@ export const LogIn = async (req: Request, res: Response) => {
             name: user.name
         });
 
+        const isStudent = await Student.findOne({ where : { user_id: user.id } });
+
         // Devolver respuesta exitosa
         res.status(200).json({
             message: "Inicio de sesión exitoso",
@@ -77,7 +80,8 @@ export const LogIn = async (req: Request, res: Response) => {
                 id: user.id,
                 name: user.name,
                 email: user.email,
-                status: userStatus.get('name')
+                status: userStatus.get('name'),
+                typeUser: isStudent ? 'student' : 'teacher'
             }
         });
         
