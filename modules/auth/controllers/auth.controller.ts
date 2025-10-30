@@ -80,7 +80,9 @@ export const LogIn = async (req: Request, res: Response) => {
                 id: user.id,
                 name: user.name,
                 email: user.email,
-                status: userStatus.get('name'),
+                status: {
+                    name: userStatus.get('name')
+                },
                 typeUser: isStudent ? 'student' : 'teacher'
             }
         });

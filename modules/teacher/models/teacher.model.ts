@@ -1,8 +1,7 @@
 import { DataTypes, Model, Optional, ModelStatic } from 'sequelize';
 import { db } from '@models/database/dbConnection';
 import { ITeacher } from '@modules/teacher/interfaces/ITeacher';
-import { IUser } from "@modules/users/interfaces/IUser";
-import Student from '@modules/student/models/student.models';
+import User from '@modules/users/models/user.models';
 
 export interface ITeacherCreationAttributes extends Optional<ITeacher, 'id'> {}
 
@@ -20,12 +19,18 @@ const Teacher = db.define<ITeacherInstance>('Teacher', {
   },
   user_id: {
     type: DataTypes.INTEGER,
-    allowNull: false
+    allowNull: false,
+    references: {
+        model: 'users',
+        key: 'id'
+    }
   }
 }, {
   tableName: 'teachers',
   timestamps: false
 }) as ITeacherModel;
+
+Teacher.belongsTo(User, { foreignKey: 'user_id', as: 'user' });
 
 Teacher.associate = (models: any) => {
   Teacher.belongsToMany(models.Student, {
