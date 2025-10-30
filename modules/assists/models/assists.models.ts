@@ -12,7 +12,7 @@ const Assists = db.define<Model<IAssists, IAssistsCreationAttributes>>('assists'
   },
   // Agrega tus campos aquí
 }, {
-  tableName: 'assistss',
+  tableName: 'assists',
   timestamps: true,
   createdAt: 'created_at',
   updatedAt: 'updated_at'

@@ -14,18 +14,18 @@ export class TeacherStudentController {
       const { studentId } = req.body;
       const teacherId = (req as any).user.id;
 
-      const student = await Student.findByPk(studentId);
+      const student = await Student.findOne({where: {user_id: studentId}});
       if (!student) {
         return res.status(404).json({ ok: false, message: 'Estudiante no encontrado' });
       }
 
-      const teacher = await Teacher.findByPk(teacherId);
+      const teacher = await Teacher.findOne({where:{user_id: teacherId}});
       if (!teacher) {
         return res.status(404).json({ ok: false, message: 'Profesor no encontrado' });
       }
 
       const existingRelation = await TeacherStudent.findOne({
-        where: { teacher_id: teacherId, student_id: studentId }
+        where: { teacher_id: teacher.id, student_id: student.id }
       });
 
       if (existingRelation) {
@@ -36,8 +36,8 @@ export class TeacherStudentController {
       }
 
       await TeacherStudent.create({
-        teacher_id: teacherId,
-        student_id: studentId,
+        teacher_id: teacher.id,
+        student_id: student.id,
         status: 'active'
       });
 
@@ -58,12 +58,22 @@ export class TeacherStudentController {
     try {
       const { studentId } = req.params;
       const teacherId = (req as any).user.id;
+
+      const student = await Student.findOne({where: {user_id: studentId}});
+      const teacher = await Teacher.findOne({where: {user_id: teacherId}});
+
+      if(!teacher) {
+        return res.status(404).json({ ok: false, message: 'Profesor no encontrado' });
+      }
+      if (!student) {
+        return res.status(404).json({ ok: false, message: 'Estudiante no encontrado' });
+      }
       const [updated] = await TeacherStudent.update(
         { status: 'inactive' },
         { 
           where: { 
-            teacher_id: teacherId, 
-            student_id: studentId,
+            teacher_id: teacher.id, 
+            student_id: student.id,
             status: 'active'
           } 
         }
@@ -137,7 +147,7 @@ export class TeacherStudentController {
         });
       }
 
-      const teacher = await Teacher.findByPk(teacherId);
+      const teacher = await Teacher.findOne({where: { user_id: teacherId }});
       if (!teacher) {
         console.log(`[DEBUG] Profesor con ID ${teacherId} no encontrado`);
         return res.status(404).json({ 
@@ -146,7 +156,10 @@ export class TeacherStudentController {
         });
       }
 
-      const student = await Student.findByPk(studentId, {
+      const student = await Student.findOne({
+        where: {
+          user_id: studentId
+        },
         include: [{
           model: User,
           as: 'user',
@@ -164,18 +177,18 @@ export class TeacherStudentController {
 
       const relation = await TeacherStudent.findOne({
         where: {
-          teacher_id: teacherId,
-          student_id: studentId,
+          teacher_id: teacher.id,
+          student_id: student.id,
           status: 'active'
         }
       });
 
       if (!relation) {
-        console.log(`[DEBUG] No se encontró relación activa entre profesor ${teacherId} y estudiante ${studentId}`);
+        console.log(`[DEBUG] No se encontró relación activa entre profesor ${teacher.id} y estudiante ${student.id}`);
         const inactiveRelation = await TeacherStudent.findOne({
           where: {
-            teacher_id: teacherId,
-            student_id: studentId,
+            teacher_id: teacher.id,
+            student_id: student.id,
             status: 'inactive'
           }
         });
@@ -184,20 +197,20 @@ export class TeacherStudentController {
           console.log(`[DEBUG] Se encontró una relación inactiva, activándola...`);
           await inactiveRelation.update({ status: 'active' });
         } else {
-          console.log(`[DEBUG] Creando nueva relación entre profesor ${teacherId} y estudiante ${studentId}`);
+          console.log(`[DEBUG] Creando nueva relación entre profesor ${teacher.id} y estudiante ${student.id}`);
           await TeacherStudent.create({
-            teacher_id: teacherId,
-            student_id: studentId,
+            teacher_id: teacher.id,
+            student_id: student.id,
             status: 'active'
           });
         }
       }
 
-      const subject = await Subject.findOne({ where: { teacher_id: teacherId } });
+      const subject = await Subject.findOne({ where: { teacher_id: teacher.id } });
 
       Studentsubject.update(
         { status: 2 },
-        { where: { student_id: studentId, subject_id: subject?.getDataValue('id') as number } }
+        { where: { student_id: student.id, subject_id: subject?.getDataValue('id') as number } }
       );
 
       const userId = (student as any).user_id;
@@ -218,7 +231,7 @@ export class TeacherStudentController {
         throw new Error('No se pudo obtener la información actualizada del estudiante');
       }
 
-      console.log(`[DEBUG] Estado del estudiante ${studentId} actualizado a '${status}' correctamente`);
+      console.log(`[DEBUG] Estado del estudiante ${student.id} actualizado a '${status}' correctamente`);
       res.status(200).json({
         ok: true,
         message: `Estado del estudiante actualizado a '${status}' correctamente`,

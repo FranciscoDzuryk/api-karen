@@ -79,8 +79,11 @@ export const LogIn = async (req: Request, res: Response) => {
             user: {
                 id: user.id,
                 name: user.name,
+                lastname: user.lastname,
                 email: user.email,
-                status: userStatus.get('name'),
+                status: {
+                    name: userStatus.get('name')
+                },
                 typeUser: isStudent ? 'student' : 'teacher'
             }
         });

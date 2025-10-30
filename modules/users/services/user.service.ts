@@ -8,24 +8,9 @@ import Classes from '@modules/classes/models/class.models';
 import ClassesContent from '@modules/classes/models/classContent.models';
 import UserStatus from '@modules/users/models/userStatus.models';
 import "@models/usersAssociations"; 
+import TeacherStudent from '@modules/teacherStudent/models/teacherStudent.model';
 
 export class UserService {
-//   static async getAllUsers() {
-//     return await User.findAll(
-//       {
-//         attributes: { exclude: ["password"] }, 
-//         include: [
-//           {
-//             model: UserStatus,
-//             as: "status",
-//             attributes: ["name"] 
-//           }
-//         ]
-//       }
-//     );
-//   }
-
-
     static async getAllUsers() {
         const include: any[] = [
             {
@@ -66,10 +51,24 @@ export class UserService {
       password: hashedPassword,
       code_register: Math.floor(100000 + Math.random() * 900000).toString(),
       code_recovery: '',
-      user_status_id: 1 // Los estudiantes comienzan como 'Creado' y necesitan ser habilitados
+      user_status_id: 1 
     });
 
+    const teacher = await Teacher.findOne();
+    if (!teacher) throw new Error('No hay profesores registrados');
+    
     const newStudent = await Student.create({ user_id: newUser.getDataValue('id') });
+    const newTeacherStudent = await TeacherStudent.create(
+      {
+        teacher_id: teacher.getDataValue('id'),
+        student_id: newStudent.getDataValue('id'),
+        status: 'active'
+      }
+    );
+    
+    if (newTeacherStudent.getDataValue('status') !== 'active' ) {
+        throw new Error('Error al asignar el estudiante al profesor');
+    }
     const firstSubject = await Subject.findOne({ order: [['id', 'ASC']] });
     
     if (!firstSubject) throw new Error('No hay materias');
